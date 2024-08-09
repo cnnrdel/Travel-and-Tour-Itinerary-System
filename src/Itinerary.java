@@ -9,13 +9,16 @@ public class Itinerary {
 	private String notes;
 	
 	public Itinerary() {
-		this.tripName = "Itinerary " + String.valueOf(uniqueCounter);
+		// this.tripName = "Itinerary " + String.valueOf(uniqueCounter);
 		counter++;
 		uniqueCounter = counter;
+
+		// test
+		this.tripName = "Itinerary " + counter;
 	}
 
 	public String getName() {
-		return "itinerary name";
+		return tripName;
 	}
 	
 	public String getTripName() {
