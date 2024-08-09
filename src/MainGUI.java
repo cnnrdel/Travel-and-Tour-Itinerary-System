@@ -128,8 +128,8 @@ public class MainGUI {
      */
     protected void addNewButton() {
         JButton newButton = new JButton("Itinerary #" + (++buttonCount));
-        
-        // Itinerary newItinerary = new Itinerary("Itinerary " + buttonCount)
+        // ItineraryHandler ih = new ItineraryHandler;
+        Itinerary newItinerary = new Itinerary();
         
         // Get screen width
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -150,11 +150,11 @@ public class MainGUI {
         /*
          *  Itinerary Code
          */
-        //buttonItineraryMap.put(newButton, newItinerary);
+        // buttonItineraryMap.put(newButton, newItinerary);
         newButton.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		System.out.println("Clicked: " + newButton.getLabel() + "!");
-//        		handleButtonClick(newItinerary);
+       		    handleButtonClick(newItinerary);
         	}
         });
         
@@ -167,8 +167,10 @@ public class MainGUI {
         buttonPanel.revalidate();
         buttonPanel.repaint();
     }
-    private void handleButtonClick() {
-    	
+    private void handleButtonClick(Itinerary i) {
+        System.out.println("Creating ItineraryGUI");
+    	ItineraryGUI itineraryGUI = new ItineraryGUI(i);
+        itineraryGUI.setVisible(true);
     }
 }
 

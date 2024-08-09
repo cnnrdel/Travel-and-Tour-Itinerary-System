@@ -13,6 +13,10 @@ public class Itinerary {
 		counter++;
 		uniqueCounter = counter;
 	}
+
+	public String getName() {
+		return "itinerary name";
+	}
 	
 	public String getTripName() {
 		return tripName;
