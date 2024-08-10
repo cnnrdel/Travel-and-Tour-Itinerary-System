@@ -1,4 +1,12 @@
+import javax.swing.JFrame;
+
 public class Main {
-	MainGUI main = new MainGUI();
+	public static void main(String[] args) {
+		MainGUI mainGUI = new MainGUI();
+		JFrame frame = mainGUI.getFrame();
+		frame.setVisible(true);
+
+
+    }
 }
 

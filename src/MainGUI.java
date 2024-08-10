@@ -27,28 +27,38 @@ import java.awt.event.ActionEvent;
 import java.awt.BorderLayout;
 
 public class MainGUI {
-
+    private GridBagLayout gbl_buttonPanel;
+    private JLabel titleLbl;
+    private GridBagConstraints gbc;
+    private JButton btnNewButton;
     private JFrame frame;
     private JPanel buttonPanel;
     private JScrollPane scrollPane;
     private GridBagConstraints gbc_btnPlus;
     private int buttonCount = 0;
+    private GridBagConstraints gbc_lblNewLabel;
+    private GridBagLayout gbl_mainPanel;
+    private JPanel mainPanel;
 
     /**
      * Launch the application.
      */
-    public static void main(String[] args) {
-        EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                try {
-                    MainGUI window = new MainGUI();
-                    window.frame.setVisible(true);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
+
+    public JFrame getFrame(){
+        return frame;
     }
+    // public static void main(String[] args) {
+    //     EventQueue.invokeLater(new Runnable() {
+    //         public void run() {
+    //             try {
+    //                 MainGUI window = new MainGUI();
+    //                 window.frame.setVisible(true);
+    //             } catch (Exception e) {
+    //                 e.printStackTrace();
+    //             }
+    //         }
+    //     });
+    // }
 
     /**
      * Create the application.
@@ -67,9 +77,9 @@ public class MainGUI {
         frame.getContentPane().setLayout(new BorderLayout(0, 0));
 
         // Create the main panel
-        JPanel mainPanel = new JPanel();
+        mainPanel = new JPanel();
         frame.getContentPane().add(mainPanel, BorderLayout.NORTH);
-        GridBagLayout gbl_mainPanel = new GridBagLayout();
+        gbl_mainPanel = new GridBagLayout();
         gbl_mainPanel.columnWidths = new int[]{0, 0};
         gbl_mainPanel.rowHeights = new int[]{0, 0};
         gbl_mainPanel.columnWeights = new double[]{0.0, Double.MIN_VALUE};
@@ -77,22 +87,22 @@ public class MainGUI {
         mainPanel.setLayout(gbl_mainPanel);
 
         // Add JLabel
-        JLabel lblNewLabel = new JLabel("Global Getaways");
-        lblNewLabel.setFont(new Font("Segoe UI Semibold", Font.PLAIN, 32));
-        GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
+        titleLbl = new JLabel("Global Getaways");
+        titleLbl.setFont(new Font("Segoe UI Semibold", Font.PLAIN, 32));
+        gbc_lblNewLabel = new GridBagConstraints();
         gbc_lblNewLabel.insets = new Insets(0, 0, 5, 0);
         gbc_lblNewLabel.gridx = 0;
         gbc_lblNewLabel.gridy = 0;
-        mainPanel.add(lblNewLabel, gbc_lblNewLabel);
+        mainPanel.add(titleLbl, gbc_lblNewLabel);
 
         // Create the panel that will hold the buttons
         buttonPanel = new JPanel();
-        GridBagLayout gbl_buttonPanel = new GridBagLayout();
+        gbl_buttonPanel = new GridBagLayout();
 //        GridBagLayout.
         buttonPanel.setLayout(gbl_buttonPanel);
         
         // constraints for itineraries being at top of JScroll
-        GridBagConstraints gbc = new GridBagConstraints();
+        gbc = new GridBagConstraints();
         gbc.insets = new Insets(0,0,0,0);
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.anchor = GridBagConstraints.NORTH;
@@ -106,7 +116,7 @@ public class MainGUI {
 
         
         // Add the + button
-        JButton btnNewButton = new JButton("+");
+        btnNewButton = new JButton("+");
         gbc_btnPlus = new GridBagConstraints();
         gbc_btnPlus.insets = new Insets(10, 10, 10, 10);  // Add space around the + button
         gbc_btnPlus.gridx = 0;
