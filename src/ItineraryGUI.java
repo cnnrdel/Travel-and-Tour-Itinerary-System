@@ -334,14 +334,21 @@ import javax.swing.JButton;
 import java.awt.Color;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
+
+//import javafx.event.ActionEvent;
+
 import javax.swing.JPanel;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 import java.awt.Font;
 
 public class ItineraryGUI extends JFrame {
 
+    private MainGUI mainGUI;
+    private Itinerary itinerary;
     private JTextField textField;
     private JTextField txtItinerary;
 
@@ -349,7 +356,9 @@ public class ItineraryGUI extends JFrame {
 			// initialize();
 		}
 
-    public ItineraryGUI(Itinerary itinerary) {
+    public ItineraryGUI(Itinerary itinerary, MainGUI mainGUI) {
+        this.itinerary = itinerary;
+        this.mainGUI = mainGUI;
         initialize(itinerary);
     }
 
@@ -370,7 +379,28 @@ public class ItineraryGUI extends JFrame {
         gbc.gridx = 1;
         gbc.gridy = 0;
         getContentPane().add(btnBackButton, gbc);
+        
+        // ActionListener for Back Button
+        btnBackButton.addActionListener(new ActionListener() {
+            
+            public void actionPerformed(ActionEvent e) {
+                String itineraryName = txtItinerary.getText();
+                String notes = textField.getText();
 
+                i.setTripName(itineraryName);
+                i.setNotes(notes);
+
+                mainGUI.updateItineraryButtonLabel(itinerary, itineraryName);
+                dispose();
+            }
+            /* 
+            @Override
+            public void actionPerformed(java.awt.event.ActionEvent e) {
+                throw new UnsupportedOperationException("Unimplemented method 'actionPerformed'");
+            }
+            */
+        });
+        
         // Delete Button
         JButton btnDelete = new JButton("DELETE");
         btnDelete.setFont(new Font("Tahoma", Font.PLAIN, 6));
@@ -378,6 +408,17 @@ public class ItineraryGUI extends JFrame {
         gbc.gridx = 2;
         gbc.gridy = 0;
         getContentPane().add(btnDelete, gbc);
+        
+        // ActionListener for Delete Button
+        btnDelete.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                txtItinerary.setText(""); 
+                textField.setText(""); 
+                mainGUI.removeItineraryButton(itinerary);
+                dispose();  
+            }
+        });
 
         // Notes Label
         JLabel lblNotes = new JLabel("Notes:");
@@ -387,12 +428,13 @@ public class ItineraryGUI extends JFrame {
 
         // Notes TextField
         textField = new JTextField();
+        textField.setText(i.getNotes());
         gbc.gridx = 0;
         gbc.gridy = 2;
         gbc.gridwidth = 3;
         getContentPane().add(textField, gbc);
 
-        // Itinerary Name TextField
+        // Itinerary NaTextFieldme 
         txtItinerary = new JTextField();
         txtItinerary.setFont(new Font("Segoe UI Semibold", Font.PLAIN, 26));
         txtItinerary.setText(i.getName()); // Set text based on Itinerary object
@@ -425,5 +467,6 @@ public class ItineraryGUI extends JFrame {
         gbc.gridx = 2;
         gbc.gridy = 0;
         panel.add(btnAddPlace, gbc);
+
     }
 }
