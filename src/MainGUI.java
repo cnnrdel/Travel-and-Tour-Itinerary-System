@@ -23,6 +23,8 @@ import javax.swing.JScrollPane;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.ActionListener;
+import java.util.HashMap;
+import java.util.Map;
 import java.awt.event.ActionEvent;
 import java.awt.BorderLayout;
 
@@ -39,6 +41,7 @@ public class MainGUI {
     private GridBagConstraints gbc_lblNewLabel;
     private GridBagLayout gbl_mainPanel;
     private JPanel mainPanel;
+    private Map<Itinerary, JButton> itineraryButtonMap = new HashMap<>();
 
     /**
      * Launch the application.
@@ -171,6 +174,8 @@ public class MainGUI {
 
         buttonPanel.add(newButton, gbc_newButton);
 
+        itineraryButtonMap.put(newItinerary, newButton);
+
         // Resize the buttonPanel based on the new button
         buttonPanel.setPreferredSize(new Dimension(scrollPane.getViewport().getWidth(), buttonPanel.getPreferredSize().height + 40));
         
@@ -179,8 +184,30 @@ public class MainGUI {
     }
     private void handleButtonClick(Itinerary i) {
         System.out.println("Creating ItineraryGUI");
-    	ItineraryGUI itineraryGUI = new ItineraryGUI(i);
+    	ItineraryGUI itineraryGUI = new ItineraryGUI(i, this);
         itineraryGUI.setVisible(true);
+    }
+
+
+    //Remove the Deleted Itineraries
+    protected void removeItineraryButton(Itinerary itinerary) {
+        JButton buttonToRemove = itineraryButtonMap.get(itinerary);
+        if (buttonToRemove != null) {
+            buttonPanel.remove(buttonToRemove);
+            buttonPanel.revalidate();
+            buttonPanel.repaint();
+            itineraryButtonMap.remove(itinerary);
+            buttonCount--;
+        }
+    }
+
+
+    //Update the Label for Itineraries
+    public void updateItineraryButtonLabel(Itinerary itinerary, String newLabel) {
+        JButton buttonToUpdate = itineraryButtonMap.get(itinerary);
+        if (buttonToUpdate != null) {
+            buttonToUpdate.setText(newLabel);
+        }
     }
 }
 
