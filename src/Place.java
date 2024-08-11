@@ -1,5 +1,6 @@
 public class Place {
 	private String placeName;
+	private String placeNotes;
 	
 	public Place(String name){
 		placeName = name;
@@ -11,6 +12,14 @@ public class Place {
 	
 	public String getName() {
 		return placeName;
+	}
+
+	public void setNotes(String notes) {
+		placeNotes = notes;
+	}
+	
+	public String getNotes() {
+		return placeNotes;
 	}
 }
 

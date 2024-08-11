@@ -6,16 +6,29 @@ import java.time.Instant;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+
+import client_keys.EncryptionUtil;
+
 import com.google.gson.JsonArray;
 
 public class FlightAPI {
     private static final String TOKEN_URL = "https://test.api.amadeus.com/v1/security/oauth2/token";
-    private static final String CLIENT_ID = "jTzpVWGWrF8o3ikzD37No3PNzYciwQFX";
-    private static final String CLIENT_SECRET = "PyqprP1sgNl4njL6";
+    private static String CLIENT_ID;
+    private static String CLIENT_SECRET;
     private static final Gson gson = new Gson();
 
     private String accessToken = null;
     private Instant tokenExpiryTime = null;
+
+    public FlightAPI() {
+        try {
+            CLIENT_ID = EncryptionUtil.readEncryptedDataFromFile("client_id.txt");
+            CLIENT_SECRET = EncryptionUtil.readEncryptedDataFromFile("client_secret.txt");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 
 // At this point, the 'flight' object is populated with the available data
 
