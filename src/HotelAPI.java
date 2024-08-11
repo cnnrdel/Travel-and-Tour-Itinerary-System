@@ -1,5 +1,7 @@
 import com.google.gson.*;
 
+import client_keys.EncryptionUtil;
+
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -11,9 +13,20 @@ import java.util.Base64;
 public class HotelAPI {
         private static final String TOKEN_URL = "https://test.api.amadeus.com/v1/security/oauth2/token";
         private static final Gson gson = new Gson();
+        private static String CLIENT_ID;
+        private static String CLIENT_SECRET;
 
         private String accessToken;
         private Instant tokenExpiryTime;
+
+        public HotelAPI() {
+        try {
+            CLIENT_ID = EncryptionUtil.readEncryptedDataFromFile("src/client_id.txt");
+            CLIENT_SECRET = EncryptionUtil.readEncryptedDataFromFile("src/client_secret.txt");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     public void checkAndRefreshToken() {
         if (expiredToken()) {

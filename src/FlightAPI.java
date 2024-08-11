@@ -22,8 +22,8 @@ public class FlightAPI {
 
     public FlightAPI() {
         try {
-            CLIENT_ID = EncryptionUtil.readEncryptedDataFromFile("client_id.txt");
-            CLIENT_SECRET = EncryptionUtil.readEncryptedDataFromFile("client_secret.txt");
+            CLIENT_ID = EncryptionUtil.readEncryptedDataFromFile("src/client_id.txt");
+            CLIENT_SECRET = EncryptionUtil.readEncryptedDataFromFile("src/client_secret.txt");
         } catch (Exception e) {
             e.printStackTrace();
         }

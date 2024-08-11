@@ -1,0 +1,10 @@
+{
+    "java.project.sourcePaths": [
+        ".",
+        "src"
+    ],
+    "java.project.referencedLibraries": [
+        "c:\\Users\\Sun Jian\\Documents\\GitHub\\Travel-and-Tour-Itinerary-System\\lib\\dotenv-0.1.1.jar",
+        "c:\\Users\\Sun Jian\\Documents\\GitHub\\Travel-and-Tour-Itinerary-System\\lib\\gson-2.10.1.jar"
+    ]
+}
