@@ -8,8 +8,8 @@ import com.google.gson.JsonObject;
 
 public class FlightAPI {
     private static final String TOKEN_URL = "https://test.api.amadeus.com/v1/security/oauth2/token";
-    private static final String CLIENT_ID = "jTzpVWGWrF8o3ikzD37No3PNzYciwQFX";
-    private static final String CLIENT_SECRET = "PyqprP1sgNl4njL6";
+//    private static final String CLIENT_ID = "jTzpVWGWrF8o3ikzD37No3PNzYciwQFX";
+//    private static final String CLIENT_SECRET = "PyqprP1sgNl4njL6";
     private static final Gson gson = new Gson();
 
     private String accessToken = null;
