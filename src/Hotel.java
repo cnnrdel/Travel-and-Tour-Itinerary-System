@@ -5,24 +5,6 @@ public class Hotel {
     private String hotelEmail;
     private double hotelDistance;
 
-    // Generates a description of the hotel
-    public String getDescription() {
-        return String.format(
-                "Hotel name is %s. Location: %s, Hotel Distance: %.2f miles",
-                hotelName != null ? hotelName : "Not available",
-                hotelAddress != null ? hotelAddress : "Not available",
-                hotelDistance
-        );
-    }
-
-    // Displays the hotel details
-    public void displayHotelDetails() {
-        System.out.println("Hotel Name: " + (hotelName != null ? hotelName : "Not available"));
-        System.out.println("Hotel Address: " + (hotelAddress != null ? hotelAddress : "Not available"));
-        System.out.println("Hotel Distance: " + hotelDistance + " miles");
-        System.out.println("Description: " + this.getDescription());
-    }
-
     // Getters and Setters
     public String getHotelName() {
         return hotelName;
@@ -63,4 +45,16 @@ public class Hotel {
     public void setHotelDistance(double hotelDistance) {
         this.hotelDistance = hotelDistance;
     }
+
+    @Override
+    public String toString() {
+        return String.format("Hotel Details:\n" +
+                        "Hotel Name: %s\n" +
+                        "Hotel Address: %s\n" +
+                        "Hotel Distance: %.2f miles\n",
+                hotelName != null ? hotelName : "Not available",
+                hotelAddress != null ? hotelAddress : "Not available",
+                hotelDistance);
+    }
+
 }

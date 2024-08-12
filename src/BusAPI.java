@@ -1,5 +1,6 @@
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import java.net.URI;
@@ -8,73 +9,83 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
 public class BusAPI {
+    private BusHandler busHandler = new BusHandler();
     private static final String APP_ID = "54267ae0"; // Replace with your actual app_id
     private static final String APP_KEY = "99bc6a239aea80afdf67509feab32799"; // Replace with your actual app_key
     private static final Gson gson = new Gson();
 
-    public void runBusServiceAPI() {
+    public void runBusAPI(String date) {
         try {
-            // Construct the URI with query parameters
-            String url = "https://transportapi.com/v3/uk/bus/services.json?operator=FBRI&line_name=1&app_id=" + APP_ID + "&app_key=" + APP_KEY;
+            // Construct the URI with basic query parameters
+            String url = "https://transportapi.com/v3/uk/bus/service_timetables.json?operator=TNXB&service=74&direction=outbound&date=" + date + "&app_id=" + APP_ID + "&app_key=" + APP_KEY;
             URI uri = new URI(url);
 
-            // Build the HTTP request
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(uri)
                     .header("Content-Type", "application/json")
                     .build();
 
-            // Create HTTP client and send request
             HttpClient client = HttpClient.newHttpClient();
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-            // Log the full response
-//            System.out.println("Full API response: " + response.body());
-
-            // Parse JSON response
             JsonObject jsonObject = gson.fromJson(response.body(), JsonObject.class);
 
-            // Check if "member" key exists and is not null
-            if (jsonObject.has("member") && !jsonObject.get("member").isJsonNull()) {
-                JsonArray services = jsonObject.getAsJsonArray("member");
 
-                // Iterate through the services and format the output
-                StringBuilder html = new StringBuilder();
-                for (int i = 0; i < services.size(); i++) {
-                    JsonObject service = services.get(i).getAsJsonObject();
+            if (jsonObject.has("member") && jsonObject.get("member").isJsonArray()) {
+                JsonArray journeys = jsonObject.getAsJsonArray("member");
 
-                    String operatorName = service.get("operator").getAsJsonObject().get("name").getAsString();
-                    String lineName = service.get("line_name").getAsString();
-                    html.append("<h4><b>").append(operatorName).append(": ").append(lineName).append("</b></h4>\n");
+                for (JsonElement journeyElement : journeys) {
+                    JsonObject journey = journeyElement.getAsJsonObject();
 
-                    JsonArray directions = service.getAsJsonArray("directions");
-                    html.append("<ul>\n");
-                    for (int j = 0; j < directions.size(); j++) {
-                        JsonObject direction = directions.get(j).getAsJsonObject();
-                        String directionName = direction.get("name").getAsString();
-                        String destinationDescription = direction.get("destination").getAsJsonObject().get("description").getAsString();
 
-                        html.append("<li>").append(directionName).append(": to ").append(destinationDescription).append("</li>\n");
+                    JsonArray stops = journey.has("stops") && journey.get("stops").isJsonArray()
+                            ? journey.getAsJsonArray("stops")
+                            : new JsonArray();
+
+                    // Create a Bus object for each stop and add it to the BusHandler
+                    for (JsonElement stopElement : stops) {
+                        JsonObject stop = stopElement.getAsJsonObject();
+                        Bus bus = new Bus();
+
+                        // Safely extract fields with null checks
+                        JsonObject aimed = stop.has("aimed") && stop.get("aimed").isJsonObject()
+                                ? stop.getAsJsonObject("aimed")
+                                : new JsonObject();
+                        JsonObject arrival = aimed.has("arrival") && aimed.get("arrival").isJsonObject()
+                                ? aimed.getAsJsonObject("arrival")
+                                : new JsonObject();
+                        JsonObject departure = aimed.has("departure") && aimed.get("departure").isJsonObject()
+                                ? aimed.getAsJsonObject("departure")
+                                : new JsonObject();
+
+                        bus.setDepartureTime(departure.has("time") && !departure.get("time").isJsonNull()
+                                ? departure.get("time").getAsString()
+                                : "N/A");
+                        bus.setArrivalTime(arrival.has("time") && !arrival.get("time").isJsonNull()
+                                ? arrival.get("time").getAsString()
+                                : "N/A");
+                        bus.setFromPoint(stop.has("name") && !stop.get("name").isJsonNull()
+                                ? stop.get("name").getAsString()
+                                : "N/A");
+                        bus.setToPoint(stop.has("locality") && !stop.get("locality").isJsonNull()
+                                ? stop.get("locality").getAsString()
+                                : "N/A");
+                        bus.setDestination(stop.has("stop_name") && !stop.get("stop_name").isJsonNull()
+                                ? stop.get("stop_name").getAsString()
+                                : "N/A");
+
+                        busHandler.addBus(bus);
                     }
-                    html.append("</ul>\n<hr>\n");
                 }
 
-                // Output the formatted HTML-like text (console output for simplicity)
-                System.out.println(html.toString());
+
+                busHandler.printBuses();
             } else {
-                // Handle the case where "member" is null or doesn't exist
-                System.out.println("No bus services found or 'member' key is missing in the response.");
+                System.out.println("No bus journeys found or 'member' key is missing in the response.");
             }
 
         } catch (Exception e) {
             System.err.println("Error parsing API response: " + e.getMessage());
         }
     }
-
-
-    public static void main(String[] args) {
-        BusAPI busServiceAPI = new BusAPI();
-        busServiceAPI.runBusServiceAPI();
-    }
 }
-

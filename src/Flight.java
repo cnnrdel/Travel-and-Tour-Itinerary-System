@@ -1,8 +1,8 @@
 public class Flight {
-    private String origLoc;
-    private String destLoc;
+    private String origin;
+    private String destination;
     private String price;
-    private int persons;
+    private int numberOfPersons;
     private String departureTime;
     private String arrivalTime;
     private String airline;
@@ -11,36 +11,61 @@ public class Flight {
     private String numberOfStops;
     private String flightNumber;
     private String aircraft;
-    private String description;
 
-    public void displayFlights(){
-        System.out.println("Flight Details:");
-        System.out.println("Origin: " + origLoc);
-        System.out.println("Destination: " + destLoc);
-        System.out.println("Price: " + price);
-        System.out.println("Persons: " + persons);
-        System.out.println("Departure Time: " + departureTime);
-        System.out.println("Arrival Time: " + arrivalTime);
-        System.out.println("Airline: " + airline);
-        System.out.println("Cabin: " + cabin);
-        System.out.println("Currency: " + currency);
-        System.out.println("Number of Stops: " + numberOfStops);
-        System.out.println("FlightNumber: " + flightNumber);
-        System.out.println("Aircraft: " + aircraft);
-        System.out.println("Description: " + this.getDescription());
-        System.out.println();
+    public String getOrigin() {
+        return origin;
     }
 
-    public String getDescription() {
-        String description = String.format(
-                "Flight from %s to %s. Departure: %s, Arrival: %s. Airline: %s, Flight Number: %s, Aircraft: %s, ",
-                origLoc, destLoc, departureTime, arrivalTime, airline, flightNumber, aircraft
-        );
-        return description;
+    public void setOrigin(String origin) {
+        this.origin = origin;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public String getDestination() {
+        return destination;
+    }
+
+    public void setDestination(String destination) {
+        this.destination = destination;
+    }
+
+    public String getPrice() {
+        return price;
+    }
+
+    public void setPrice(String price) {
+        this.price = price;
+    }
+
+    public int getNumberOfPersons() {
+        return numberOfPersons;
+    }
+
+    public void setNumberOfPersons(int numberOfPersons) {
+        this.numberOfPersons = numberOfPersons;
+    }
+
+    public String getDepartureTime() {
+        return departureTime;
+    }
+
+    public void setDepartureTime(String departureTime) {
+        this.departureTime = departureTime;
+    }
+
+    public String getArrivalTime() {
+        return arrivalTime;
+    }
+
+    public void setArrivalTime(String arrivalTime) {
+        this.arrivalTime = arrivalTime;
+    }
+
+    public String getAirline() {
+        return airline;
+    }
+
+    public void setAirline(String airline) {
+        this.airline = airline;
     }
 
     public String getCabin() {
@@ -83,59 +108,22 @@ public class Flight {
         this.aircraft = aircraft;
     }
 
-    public String getAirline(){
-        return airline;
-    }
-
-    public void setAirline(String airline){
-        this.airline = airline;
-    }
-
-    public String getOrigLoc() {
-        return origLoc;
-    }
-
-    public void setOrigin(String origLoc) {
-        this.origLoc = origLoc;
-    }
-
-    public String getDestLoc() {
-        return destLoc;
-    }
-
-    public void setDestination(String destLoc) {
-        this.destLoc = destLoc;
-    }
-
-    public String getPrice() {
-        return price;
-    }
-
-    public void setPrice(String price) {
-        this.price = price;
-    }
-
-    public int getPersons() {
-        return persons;
-    }
-
-    public void setNumberOfPersons(int persons) {
-        this.persons = persons;
-    }
-
-    public String getDepartureTime() {
-        return departureTime;
-    }
-
-    public void setDepartureTime(String departureTime) {
-        this.departureTime = departureTime;
-    }
-
-    public String getArrivalTime() {
-        return arrivalTime;
-    }
-
-    public void setArrivalTime(String arrivalTime) {
-        this.arrivalTime = arrivalTime;
+    @Override
+    public String toString() {
+        return String.format("Flight Details:\n" +
+                        "Origin: %s\n" +
+                        "Destination: %s\n" +
+                        "Currency: %s\n" +
+                        "Price: %s\n" +
+                        "Persons: %d\n" +
+                        "Departure Time: %s\n" +
+                        "Arrival Time: %s\n" +
+                        "Airline: %s\n" +
+                        "Cabin: %s\n" +
+                        "Number of Stops: %s\n" +
+                        "Flight Number: %s\n" +
+                        "Aircraft: %s\n",
+                origin, destination, currency, price, numberOfPersons, departureTime, arrivalTime,
+                airline, cabin, numberOfStops, flightNumber, aircraft);
     }
 }

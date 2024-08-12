@@ -13,12 +13,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TrainAPI {
-
+    private TrainHandler trainHandler = new TrainHandler();
     private static final Gson gson = new Gson();
     private static final String APP_ID = "54267ae0"; // Replace with your actual app_id
     private static final String APP_KEY = "99bc6a239aea80afdf67509feab32799"; // Replace with your actual app_key
-    public List<Train> fetchTrains(String dateTime, String stationCode) {
-        List<Train> trains = new ArrayList<>();
+    public void runTrainsAPI(String dateTime, String stationCode) {
 
         try {
             // Default values for other parameters
@@ -96,23 +95,13 @@ public class TrainAPI {
                 train.setTrainUid(trainUid);
 
                 // Add the Train object to the list
-                trains.add(train);
+                trainHandler.addTrain(train);
             }
 
         } catch (Exception e) {
             System.err.println("Error fetching train data: " + e.getMessage());
         }
+        trainHandler.displayTrainList();
 
-        return trains;
     }
-// debugging and testing
-//    public static void main(String[] args) {
-//        TrainAPI trainAPI = new TrainAPI();
-//        List<Train> trains = trainAPI.fetchTrains("2024-08-12T20:30:00+01:00", "RMD");
-//
-//        // Output the fetched trains
-//        for (Train train : trains) {
-//            System.out.println(train.toString());
-//        }
-//    }
 }

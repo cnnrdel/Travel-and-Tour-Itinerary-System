@@ -50,4 +50,3 @@ public class Train {
                 departureTime, originName, destinationName, platform, trainUid);
     }
 }
-

@@ -16,6 +16,7 @@ public class FlightAPI {
     private static String CLIENT_ID;
     private static String CLIENT_SECRET;
     private static final Gson gson = new Gson();
+    private TrainHandler trainHandler = new TrainHandler();
 
     private String accessToken = null;
     private Instant tokenExpiryTime = null;
@@ -82,126 +83,91 @@ public class FlightAPI {
         }
     }
 
-    public void runFlightAPI(String origLoc, String destLoc, String departDate, int numOfAdults) {
-        this.checkAndRefreshToken();
+    public void runTrainsAPI(String dateTime, String stationCode) {
+
         try {
-            // Create the HttpRequest object
-            HttpRequest postRequest = HttpRequest.newBuilder()
-                    .uri(new URI("https://test.api.amadeus.com/v2/shopping/flight-offers?originLocationCode="+ origLoc+"&destinationLocationCode=" + destLoc +"&departureDate=" + departDate +"&adults="+ numOfAdults +"&nonStop=false&max=15"))
-                    .header("Authorization", "Bearer " + this.accessToken)
+            // Default values for other parameters
+            String fromOffset = "PT00:30:00";
+            String toOffset = "PT01:30:00";
+            int limit = 20;
+            boolean live = true;
+            String trainStatus = "passenger";
+            String stationDetail = "origin,destination";
+            String type = "arrival,departure,pass";
+
+            // Encode parameters
+            String encodedStationCode = URLEncoder.encode(stationCode, StandardCharsets.UTF_8.toString());
+            String encodedDateTime = URLEncoder.encode(dateTime, StandardCharsets.UTF_8.toString());
+            String encodedFromOffset = URLEncoder.encode(fromOffset, StandardCharsets.UTF_8.toString());
+            String encodedToOffset = URLEncoder.encode(toOffset, StandardCharsets.UTF_8.toString());
+            String encodedStationDetail = URLEncoder.encode(stationDetail, StandardCharsets.UTF_8.toString());
+            String encodedType = URLEncoder.encode(type, StandardCharsets.UTF_8.toString());
+
+            // Construct the URI with query parameters
+            String url = String.format(
+                    "https://transportapi.com/v3/uk/train/station_timetables/crs%%3A%s.json?datetime=%s&from_offset=%s&to_offset=%s&limit=%d&live=%b&train_status=%s&station_detail=%s&type=%s&app_key=%s&app_id=%s",
+                    encodedStationCode,
+                    encodedDateTime,
+                    encodedFromOffset,
+                    encodedToOffset,
+                    limit,
+                    live,
+                    trainStatus,
+                    encodedStationDetail,
+                    encodedType,
+                    APP_KEY,
+                    APP_ID
+            );
+
+            URI uri = new URI(url);
+
+            // Build the HTTP request
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(uri)
                     .header("Content-Type", "application/json")
                     .build();
+
+            // Create HTTP client and send request
             HttpClient client = HttpClient.newHttpClient();
-            HttpResponse<String> postResponse = client.send(postRequest, HttpResponse.BodyHandlers.ofString());
-//            System.out.println(postResponse.body()); // test if API works
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-            // Parse JSON into JsonObject
-            Gson gson = new Gson();
-            JsonObject jsonObject = gson.fromJson(postResponse.body(), JsonObject.class);
+            //debugging
+//            System.out.println("Raw API Response:");
+//            System.out.println(response.body());
 
-// Extract flight offer details
-            JsonArray dataArray = jsonObject.getAsJsonArray("data");
-            if (dataArray != null && dataArray.size() > 0) {
-                int count = 1; // To count the number of flights
-                for (JsonElement element : dataArray) {
-                    Flight flight = new Flight();
-                    JsonObject firstFlightOffer = element.getAsJsonObject();
-                    JsonArray itinerariesArray = firstFlightOffer.getAsJsonArray("itineraries");
+            // Parse JSON response
+            JsonObject jsonObject = JsonParser.parseString(response.body()).getAsJsonObject();
+            JsonArray updates = jsonObject.getAsJsonObject("updates").getAsJsonArray("all");
 
-                    if (itinerariesArray != null && itinerariesArray.size() > 0) {
-                        JsonObject firstItinerary = itinerariesArray.get(0).getAsJsonObject();
-                        JsonArray segmentsArray = firstItinerary.getAsJsonArray("segments");
+            for (int i = 0; i < updates.size(); i++) {
+                JsonObject update = updates.get(i).getAsJsonObject();
 
-                        if (segmentsArray != null && segmentsArray.size() > 0) {
-                            // Extract destination IATA code
-                            String destination = segmentsArray.get(segmentsArray.size() - 1).getAsJsonObject()
-                                    .getAsJsonObject("arrival")
-                                    .get("iataCode").getAsString();
-                            flight.setDestination(destination);
+                // Creates a Train object
+                Train train = new Train();
 
-                            // Extract origin IATA code
-                            String origin = segmentsArray.get(0).getAsJsonObject()
-                                    .getAsJsonObject("departure")
-                                    .get("iataCode").getAsString();
-                            flight.setOrigin(origin);
+                // Extracts and sets attributes for the Train object
+                String departureTime = update.has("aimed_departure_time") && !update.get("aimed_departure_time").isJsonNull() ? update.get("aimed_departure_time").getAsString() : "Unknown";
+                JsonObject stationInfo = update.has("station_detail") && !update.get("station_detail").isJsonNull() ? update.getAsJsonObject("station_detail") : new JsonObject();
+                String originName = stationInfo.has("origin") && !stationInfo.get("origin").isJsonNull() ? stationInfo.getAsJsonObject("origin").get("station_name").getAsString() : "Unknown";
+                String destinationName = stationInfo.has("destination") && !stationInfo.get("destination").isJsonNull() ? stationInfo.getAsJsonObject("destination").get("station_name").getAsString() : "Unknown";
+                String platform = update.has("platform") && !update.get("platform").isJsonNull() ? update.get("platform").getAsString() : "Unknown";
+                String trainUid = update.has("train_uid") && !update.get("train_uid").isJsonNull() ? update.get("train_uid").getAsString() : "Unknown";
 
-                            // Extract departure time
-                            String departureTime = segmentsArray.get(0).getAsJsonObject()
-                                    .getAsJsonObject("departure")
-                                    .get("at").getAsString();
-                            flight.setDepartureTime(departureTime);
+                // Sets the attributes
+                train.setDepartureTime(departureTime);
+                train.setOriginName(originName);
+                train.setDestinationName(destinationName);
+                train.setPlatform(platform);
+                train.setTrainUid(trainUid);
 
-                            // Extract arrival time
-                            String arrivalTime = segmentsArray.get(segmentsArray.size() - 1).getAsJsonObject()
-                                    .getAsJsonObject("arrival")
-                                    .get("at").getAsString();
-                            flight.setArrivalTime(arrivalTime);
-
-                            // Extract airline code
-                            String airline = segmentsArray.get(0).getAsJsonObject()
-                                    .get("carrierCode").getAsString();
-                            flight.setAirline(airline);
-
-                            // Extract flight number
-                            String flightNumber = segmentsArray.get(0).getAsJsonObject()
-                                    .get("number").getAsString();
-                            flight.setFlightNumber(flightNumber);
-
-                            // Extract aircraft
-                            String aircraft = segmentsArray.get(0).getAsJsonObject()
-                                    .getAsJsonObject("aircraft")
-                                    .get("code").getAsString();
-                            flight.setAircraft(aircraft);
-
-                            // Extract number of stops
-                            String numberOfStops = String.valueOf(segmentsArray.size() - 1);
-                            flight.setNumberOfStops(numberOfStops);
-
-                            // Extract price and currency
-                            JsonObject priceObject = firstFlightOffer.getAsJsonObject("price");
-                            if (priceObject != null) {
-                                String price = priceObject.get("grandTotal").getAsString();
-                                String currency = priceObject.get("currency").getAsString();
-                                flight.setPrice(price);
-                                flight.setCurrency(currency);
-                            }
-
-                            // Get number of persons
-                            JsonArray travelerPricingsArray = firstFlightOffer.getAsJsonArray("travelerPricings");
-                            int numberOfPersons = travelerPricingsArray != null ? travelerPricingsArray.size() : 0;
-                            flight.setNumberOfPersons(numberOfPersons);
-
-                            // Extract cabin class and ensure it is unique
-                            String cabin = null;
-                            if (travelerPricingsArray != null && travelerPricingsArray.size() > 0) {
-                                JsonObject firstTravelerPricing = travelerPricingsArray.get(0).getAsJsonObject();
-                                JsonArray fareDetailsBySegmentArray = firstTravelerPricing.getAsJsonArray("fareDetailsBySegment");
-
-                                if (fareDetailsBySegmentArray != null && fareDetailsBySegmentArray.size() > 0) {
-                                    cabin = fareDetailsBySegmentArray.get(0).getAsJsonObject()
-                                            .get("cabin").getAsString();
-                                }
-                            }
-                            flight.setCabin(cabin);
-
-                            System.out.println("Flight " + count + ":");
-                            // Display the flight details
-                            flight.displayFlights();
-
-                            count++;
-                        } else {
-                            System.out.println("Segments data is missing or incomplete for flight " + count + ".");
-                        }
-                    } else {
-                        System.out.println("Itineraries data is missing or incomplete for flight " + count + ".");
-                    }
-                }
-            } else {
-                System.out.println("Flight offers data is missing or incomplete.");
+                // Add the Train object to the list
+                trainHandler.addTrain(train);
             }
+
         } catch (Exception e) {
-            e.printStackTrace();
+            System.err.println("Error fetching train data: " + e.getMessage());
         }
+        trainHandler.displayTrainList();
 
     }
 }

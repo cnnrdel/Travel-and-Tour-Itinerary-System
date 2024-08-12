@@ -15,7 +15,7 @@ public class HotelAPI {
         private static final Gson gson = new Gson();
         private static String CLIENT_ID;
         private static String CLIENT_SECRET;
-
+        private HotelHandler hotelHandler = new HotelHandler();
         private String accessToken;
         private Instant tokenExpiryTime;
 
@@ -120,11 +120,7 @@ public class HotelAPI {
                     // Extract and set hotel distance
                     double hotelDistance = hotelObject.getAsJsonObject("distance").get("value").getAsDouble();
                     hotel.setHotelDistance(hotelDistance);
-
-                    // Display the hotel details
-                    System.out.println("Hotel " + count + ":");
-                    hotel.displayHotelDetails();
-
+                    hotelHandler.addHotel(hotel);
                     count++;
                 }
             } else {
@@ -133,5 +129,6 @@ public class HotelAPI {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        hotelHandler.displayHotelList();
     }
 }
