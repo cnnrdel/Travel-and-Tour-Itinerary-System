@@ -13,6 +13,10 @@ public class TrainHandler {
         }
     }
 
+    public void setTrainList(ArrayList<Train> trainList) {
+        this.trainList = trainList;
+    }
+
     public ArrayList<Train> getTrainList() {
         return trainList;
     }

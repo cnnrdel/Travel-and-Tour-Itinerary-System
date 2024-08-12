@@ -15,9 +15,10 @@ import java.util.List;
 public class TrainAPI {
     private TrainHandler trainHandler = new TrainHandler();
     private static final Gson gson = new Gson();
-    private static final String APP_ID = "54267ae0";
-    private static final String APP_KEY = "99bc6a239aea80afdf67509feab32799"; 
-    public void runTrainsAPI(String dateTime, String stationCode) {
+    private static final String APP_ID = "3510aec5";
+    private static final String APP_KEY = "1e7f9a64a44f11db885af0c42dedc968";
+    public ArrayList<Train> runTrainsAPI(String dateTime, String stationCode) {
+        ArrayList<Train> trainList = new ArrayList<>();
 
         try {
             String fromOffset = "PT00:30:00";
@@ -60,42 +61,67 @@ public class TrainAPI {
             HttpClient client = HttpClient.newHttpClient();
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-            //debugging
+//            // Debugging
 //            System.out.println("Raw API Response:");
 //            System.out.println(response.body());
 
             // Parse JSON response
             JsonObject jsonObject = JsonParser.parseString(response.body()).getAsJsonObject();
-            JsonArray updates = jsonObject.getAsJsonObject("updates").getAsJsonArray("all");
 
-            for (int i = 0; i < updates.size(); i++) {
-                JsonObject update = updates.get(i).getAsJsonObject();
+            // Check if the "updates" key exists and is a JsonObject
+            if (jsonObject.has("updates") && jsonObject.get("updates").isJsonObject()) {
+                JsonObject updatesObject = jsonObject.getAsJsonObject("updates");
 
-                Train train = new Train();
+                // Check if "all" key exists and is a JsonArray
+                if (updatesObject.has("all") && updatesObject.get("all").isJsonArray()) {
+                    JsonArray updates = updatesObject.getAsJsonArray("all");
 
-                // Extracts and sets attributes for the Train object
-                String departureTime = update.has("aimed_departure_time") && !update.get("aimed_departure_time").isJsonNull() ? update.get("aimed_departure_time").getAsString() : "Unknown";
-                JsonObject stationInfo = update.has("station_detail") && !update.get("station_detail").isJsonNull() ? update.getAsJsonObject("station_detail") : new JsonObject();
-                String originName = stationInfo.has("origin") && !stationInfo.get("origin").isJsonNull() ? stationInfo.getAsJsonObject("origin").get("station_name").getAsString() : "Unknown";
-                String destinationName = stationInfo.has("destination") && !stationInfo.get("destination").isJsonNull() ? stationInfo.getAsJsonObject("destination").get("station_name").getAsString() : "Unknown";
-                String platform = update.has("platform") && !update.get("platform").isJsonNull() ? update.get("platform").getAsString() : "Unknown";
-                String trainUid = update.has("train_uid") && !update.get("train_uid").isJsonNull() ? update.get("train_uid").getAsString() : "Unknown";
+                    for (int i = 0; i < updates.size(); i++) {
+                        JsonObject update = updates.get(i).getAsJsonObject();
 
-                // Sets the attributes
-                train.setDepartureTime(departureTime);
-                train.setOriginName(originName);
-                train.setDestinationName(destinationName);
-                train.setPlatform(platform);
-                train.setTrainUid(trainUid);
+                        Train train = new Train();
 
-                // Add the Train object to the list
-                trainHandler.addTrain(train);
+                        String departureTime = update.has("aimed_departure_time") && !update.get("aimed_departure_time").isJsonNull()
+                                ? update.get("aimed_departure_time").getAsString()
+                                : "Unknown";
+                        JsonObject stationInfo = update.has("station_detail") && !update.get("station_detail").isJsonNull()
+                                ? update.getAsJsonObject("station_detail")
+                                : new JsonObject();
+                        String originName = stationInfo.has("origin") && !stationInfo.get("origin").isJsonNull()
+                                ? stationInfo.getAsJsonObject("origin").get("station_name").getAsString()
+                                : "Unknown";
+                        String destinationName = stationInfo.has("destination") && !stationInfo.get("destination").isJsonNull()
+                                ? stationInfo.getAsJsonObject("destination").get("station_name").getAsString()
+                                : "Unknown";
+                        String platform = update.has("platform") && !update.get("platform").isJsonNull()
+                                ? update.get("platform").getAsString()
+                                : "Unknown";
+                        String trainUid = update.has("train_uid") && !update.get("train_uid").isJsonNull()
+                                ? update.get("train_uid").getAsString()
+                                : "Unknown";
+
+                        train.setDepartureTime(departureTime);
+                        train.setOriginName(originName);
+                        train.setDestinationName(destinationName);
+                        train.setPlatform(platform);
+                        train.setTrainUid(trainUid);
+
+                        // Add the Train object to the list
+                        trainHandler.addTrain(train);
+                    }
+                } else {
+                    System.err.println("No 'all' array found in 'updates'");
+                }
+            } else {
+                System.err.println("No 'updates' object found in response");
             }
 
         } catch (Exception e) {
             System.err.println("Error fetching train data: " + e.getMessage());
         }
         trainHandler.displayTrainList();
-
+        return  trainHandler.getTrainList();
     }
 }
+
+
