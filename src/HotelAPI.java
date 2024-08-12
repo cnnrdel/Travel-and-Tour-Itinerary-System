@@ -34,8 +34,9 @@ public class HotelAPI {
         }
     }
 
+     // Check if the token is null or if the current time is past the expiry time
     public boolean expiredToken() {
-        // Check if the token is null or if the current time is past the expiry time
+       
         return accessToken == null || Instant.now().isAfter(tokenExpiryTime);
     }
 
@@ -43,15 +44,12 @@ public class HotelAPI {
         try {
             HttpClient client = HttpClient.newHttpClient();
 
-            // Prepare the request body
             String requestBody = "grant_type=client_credentials";
 
-            // Create the Authorization header
             String auth = CLIENT_ID + ":" + CLIENT_SECRET;
             String encodedAuth = Base64.getEncoder().encodeToString(auth.getBytes());
             String authHeader = "Basic " + encodedAuth;
 
-            // Create the request
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(TOKEN_URL))
                     .header("Authorization", authHeader) // Add the Authorization header
@@ -59,23 +57,19 @@ public class HotelAPI {
                     .POST(HttpRequest.BodyPublishers.ofString(requestBody))
                     .build();
 
-            // Send the request and receive the response
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-            // Parse the response
             JsonObject jsonResponse = gson.fromJson(response.body(), JsonObject.class);
 
             if (jsonResponse.has("access_token")) {
                 accessToken = jsonResponse.get("access_token").getAsString();
                 int expiresIn = jsonResponse.get("expires_in").getAsInt();
 
-                // Calculate the token expiry time
                 tokenExpiryTime = Instant.now().plusSeconds(expiresIn);
 
                 System.out.println("New Access Token: " + accessToken);
                 System.out.println("Token Expires At: " + tokenExpiryTime);
             } else {
-                // Handle error response
                 System.err.println("Failed to obtain access token: " + response.body());
             }
 
@@ -88,7 +82,6 @@ public class HotelAPI {
     public void runHotelAPI(int radius, String cityName) {
         this.checkAndRefreshToken();
         try {
-            // Create the HttpRequest object
             HttpRequest postRequest = HttpRequest.newBuilder()
                     .uri(new URI("https://test.api.amadeus.com/v1/reference-data/locations/hotels/by-city?cityCode=" + cityName + "&radius=" + radius +"&radiusUnit=MILE&hotelSource=ALL"))
                     .header("Authorization", "Bearer " + this.accessToken)
@@ -96,9 +89,7 @@ public class HotelAPI {
                     .build();
             HttpClient client = HttpClient.newHttpClient();
             HttpResponse<String> postResponse = client.send(postRequest, HttpResponse.BodyHandlers.ofString());
-            //  System.out.println(postResponse.body()); // test if API works
 
-            // Parse JSON into JsonObject
             Gson gson = new Gson();
             JsonObject jsonObject = gson.fromJson(postResponse.body(), JsonObject.class);
             JsonArray dataArray = jsonObject.getAsJsonArray("data");

@@ -10,13 +10,13 @@ import java.net.http.HttpResponse;
 
 public class BusAPI {
     private BusHandler busHandler = new BusHandler();
-    private static final String APP_ID = "54267ae0"; // Replace with your actual app_id
-    private static final String APP_KEY = "99bc6a239aea80afdf67509feab32799"; // Replace with your actual app_key
+    private static final String APP_ID = "54267ae0"; 
+    private static final String APP_KEY = "99bc6a239aea80afdf67509feab32799"; 
     private static final Gson gson = new Gson();
 
     public void runBusAPI(String date) {
         try {
-            // Construct the URI with basic query parameters
+         
             String url = "https://transportapi.com/v3/uk/bus/service_timetables.json?operator=TNXB&service=74&direction=outbound&date=" + date + "&app_id=" + APP_ID + "&app_key=" + APP_KEY;
             URI uri = new URI(url);
 
@@ -47,7 +47,7 @@ public class BusAPI {
                         JsonObject stop = stopElement.getAsJsonObject();
                         Bus bus = new Bus();
 
-                        // Safely extract fields with null checks
+                        
                         JsonObject aimed = stop.has("aimed") && stop.get("aimed").isJsonObject()
                                 ? stop.getAsJsonObject("aimed")
                                 : new JsonObject();

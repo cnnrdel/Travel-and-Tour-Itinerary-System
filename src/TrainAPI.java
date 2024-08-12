@@ -15,12 +15,11 @@ import java.util.List;
 public class TrainAPI {
     private TrainHandler trainHandler = new TrainHandler();
     private static final Gson gson = new Gson();
-    private static final String APP_ID = "54267ae0"; // Replace with your actual app_id
-    private static final String APP_KEY = "99bc6a239aea80afdf67509feab32799"; // Replace with your actual app_key
+    private static final String APP_ID = "54267ae0";
+    private static final String APP_KEY = "99bc6a239aea80afdf67509feab32799"; 
     public void runTrainsAPI(String dateTime, String stationCode) {
 
         try {
-            // Default values for other parameters
             String fromOffset = "PT00:30:00";
             String toOffset = "PT01:30:00";
             int limit = 20;
@@ -29,7 +28,6 @@ public class TrainAPI {
             String stationDetail = "origin,destination";
             String type = "arrival,departure,pass";
 
-            // Encode parameters
             String encodedStationCode = URLEncoder.encode(stationCode, StandardCharsets.UTF_8.toString());
             String encodedDateTime = URLEncoder.encode(dateTime, StandardCharsets.UTF_8.toString());
             String encodedFromOffset = URLEncoder.encode(fromOffset, StandardCharsets.UTF_8.toString());
@@ -37,7 +35,6 @@ public class TrainAPI {
             String encodedStationDetail = URLEncoder.encode(stationDetail, StandardCharsets.UTF_8.toString());
             String encodedType = URLEncoder.encode(type, StandardCharsets.UTF_8.toString());
 
-            // Construct the URI with query parameters
             String url = String.format(
                     "https://transportapi.com/v3/uk/train/station_timetables/crs%%3A%s.json?datetime=%s&from_offset=%s&to_offset=%s&limit=%d&live=%b&train_status=%s&station_detail=%s&type=%s&app_key=%s&app_id=%s",
                     encodedStationCode,
@@ -55,13 +52,11 @@ public class TrainAPI {
 
             URI uri = new URI(url);
 
-            // Build the HTTP request
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(uri)
                     .header("Content-Type", "application/json")
                     .build();
 
-            // Create HTTP client and send request
             HttpClient client = HttpClient.newHttpClient();
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
@@ -76,7 +71,6 @@ public class TrainAPI {
             for (int i = 0; i < updates.size(); i++) {
                 JsonObject update = updates.get(i).getAsJsonObject();
 
-                // Creates a Train object
                 Train train = new Train();
 
                 // Extracts and sets attributes for the Train object

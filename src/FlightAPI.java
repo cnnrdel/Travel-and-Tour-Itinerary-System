@@ -30,17 +30,14 @@ public class FlightAPI {
         }
     }
 
-
-// At this point, the 'flight' object is populated with the available data
-
     public void checkAndRefreshToken() {
         if (expiredToken()) {
             refreshToken();
         }
     }
 
+// Check if the token is null or if the current time is past the expiry time
     public boolean expiredToken() {
-        // Check if the token is null or if the current time is past the expiry time
         return accessToken == null || Instant.now().isAfter(tokenExpiryTime);
     }
 
@@ -48,17 +45,14 @@ public class FlightAPI {
         try {
             HttpClient client = HttpClient.newHttpClient();
 
-            // Prepare the request body
             String requestBody = "grant_type=client_credentials&client_id=" + CLIENT_ID + "&client_secret=" + CLIENT_SECRET;
 
-            // Create the request
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(TOKEN_URL))
                     .header("Content-Type", "application/x-www-form-urlencoded")
                     .POST(HttpRequest.BodyPublishers.ofString(requestBody))
                     .build();
 
-            // Send the request and receive the response
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
             // Parse the response
@@ -68,13 +62,11 @@ public class FlightAPI {
                 accessToken = jsonResponse.get("access_token").getAsString();
                 int expiresIn = jsonResponse.get("expires_in").getAsInt();
 
-                // Calculate the token expiry time
                 tokenExpiryTime = Instant.now().plusSeconds(expiresIn);
 
                 System.out.println("New Access Token: " + accessToken);
                 System.out.println("Token Expires At: " + tokenExpiryTime);
             } else {
-                // Handle error response
                 System.err.println("Failed to obtain access token: " + response.body());
             }
 
@@ -86,7 +78,6 @@ public class FlightAPI {
     public void runTrainsAPI(String dateTime, String stationCode) {
 
         try {
-            // Default values for other parameters
             String fromOffset = "PT00:30:00";
             String toOffset = "PT01:30:00";
             int limit = 20;
@@ -95,7 +86,6 @@ public class FlightAPI {
             String stationDetail = "origin,destination";
             String type = "arrival,departure,pass";
 
-            // Encode parameters
             String encodedStationCode = URLEncoder.encode(stationCode, StandardCharsets.UTF_8.toString());
             String encodedDateTime = URLEncoder.encode(dateTime, StandardCharsets.UTF_8.toString());
             String encodedFromOffset = URLEncoder.encode(fromOffset, StandardCharsets.UTF_8.toString());
@@ -121,13 +111,11 @@ public class FlightAPI {
 
             URI uri = new URI(url);
 
-            // Build the HTTP request
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(uri)
                     .header("Content-Type", "application/json")
                     .build();
 
-            // Create HTTP client and send request
             HttpClient client = HttpClient.newHttpClient();
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
@@ -142,7 +130,6 @@ public class FlightAPI {
             for (int i = 0; i < updates.size(); i++) {
                 JsonObject update = updates.get(i).getAsJsonObject();
 
-                // Creates a Train object
                 Train train = new Train();
 
                 // Extracts and sets attributes for the Train object
@@ -160,7 +147,6 @@ public class FlightAPI {
                 train.setPlatform(platform);
                 train.setTrainUid(trainUid);
 
-                // Add the Train object to the list
                 trainHandler.addTrain(train);
             }
 
