@@ -135,5 +135,64 @@ public class ItineraryGUI extends JFrame {
         gbc.gridy = 0;
         panel.add(btnAddPlace, gbc);
 
+        JPanel bottomPanel = new JPanel();
+        gbc.gridx = 0;
+        gbc.gridy = 5;
+        gbc.gridwidth = 3;
+        gbc.anchor = GridBagConstraints.PAGE_END; // Align at the bottom of the window
+        getContentPane().add(bottomPanel, gbc);
+
+        bottomPanel.setLayout(new GridBagLayout());
+        GridBagConstraints gbcBottom = new GridBagConstraints();
+        gbcBottom.insets = new Insets(5, 5, 5, 5);
+
+        // Hotel Button
+        JButton btnHotel = new JButton("Hotel");
+        gbcBottom.gridx = 0;
+        gbcBottom.gridy = 0;
+        bottomPanel.add(btnHotel, gbcBottom);
+
+        btnHotel.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new BookHotelGUI(itinerary).setVisible(true);
+            }
+        });
+
+        // Train Button
+        JButton btnTrain = new JButton("Train");
+        gbcBottom.gridx = 1;
+        gbcBottom.gridy = 0;
+        bottomPanel.add(btnTrain, gbcBottom);
+        btnTrain.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new BookTrainGUI(itinerary).setVisible(true);
+            }
+        });
+
+        // Bus Button
+        JButton btnBus = new JButton("Bus");
+        gbcBottom.gridx = 2;
+        gbcBottom.gridy = 0;
+        bottomPanel.add(btnBus, gbcBottom);
+        btnBus.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new BookBusGUI(itinerary).setVisible(true);
+            }
+        });
+
+        // Flight Button
+        JButton btnFlight = new JButton("Flight");
+        gbcBottom.gridx = 3;
+        gbcBottom.gridy = 0;
+        bottomPanel.add(btnFlight, gbcBottom);
+        btnFlight.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new BookFlightGUI(itinerary).setVisible(true);
+            }
+        });
     }
 }

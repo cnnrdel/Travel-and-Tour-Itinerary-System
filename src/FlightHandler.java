@@ -7,6 +7,10 @@ public class FlightHandler {
         return flights;
     }
 
+    public void setFlights(ArrayList<Flight> flights) {
+        this.flights = flights;
+    }
+
     public void addFlight(Flight flight) {
         flights.add(flight);
     }

@@ -3,8 +3,12 @@ import java.util.ArrayList;
 public class BusHandler {
     private ArrayList<Bus> buses = new ArrayList<Bus>();
 
-    public ArrayList<Bus> getBus() {
+    public ArrayList<Bus> getBuses() {
         return buses;
+    }
+
+    public void setBuses(ArrayList<Bus> buses) {
+        this.buses = buses;
     }
 
     public void addBus(Bus bus) {

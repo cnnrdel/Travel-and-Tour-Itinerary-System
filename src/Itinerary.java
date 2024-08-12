@@ -7,6 +7,10 @@ public class Itinerary {
 	private static int counter = 0;
 	private int uniqueCounter = 0;
 	private String notes;
+	private Hotel hotel;
+	private Bus bus;
+	private Flight flight;
+	private Train train;
 	
 	public Itinerary() {
 		// this.tripName = "Itinerary " + String.valueOf(uniqueCounter);
@@ -40,5 +44,36 @@ public class Itinerary {
 	public void setNotes(String notes) {
 		this.notes = notes;
 	}
-	
+
+	public Hotel getHotel() {
+		return hotel;
+	}
+
+	public void setHotel(Hotel hotel) {
+		this.hotel = hotel;
+	}
+
+	public Bus getBus() {
+		return bus;
+	}
+
+	public void setBus(Bus bus) {
+		this.bus = bus;
+	}
+
+	public Flight getFlight() {
+		return flight;
+	}
+
+	public void setFlight(Flight flight) {
+		this.flight = flight;
+	}
+
+	public Train getTrain() {
+		return train;
+	}
+
+	public void setTrain(Train train) {
+		this.train = train;
+	}
 }

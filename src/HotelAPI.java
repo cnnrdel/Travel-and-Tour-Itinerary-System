@@ -8,6 +8,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.Base64;
 
 public class HotelAPI {
@@ -78,12 +79,11 @@ public class HotelAPI {
         }
     }
 
-
-    public void runHotelAPI(int radius, String cityName) {
+    public ArrayList<Hotel> runHotelAPI(int radius, String cityName) {
         this.checkAndRefreshToken();
         try {
             HttpRequest postRequest = HttpRequest.newBuilder()
-                    .uri(new URI("https://test.api.amadeus.com/v1/reference-data/locations/hotels/by-city?cityCode=" + cityName + "&radius=" + radius +"&radiusUnit=MILE&hotelSource=ALL"))
+                    .uri(new URI("https://test.api.amadeus.com/v1/reference-data/locations/hotels/by-city?cityCode=" + cityName + "&radius=" + radius + "&radiusUnit=MILE&hotelSource=ALL"))
                     .header("Authorization", "Bearer " + this.accessToken)
                     .header("Content-Type", "application/json")
                     .build();
@@ -95,24 +95,29 @@ public class HotelAPI {
             JsonArray dataArray = jsonObject.getAsJsonArray("data");
 
             if (dataArray != null && dataArray.size() > 0) {
-                int count = 1;
                 for (JsonElement element : dataArray) {
                     Hotel hotel = new Hotel();
                     JsonObject hotelObject = element.getAsJsonObject();
 
                     // Extract and set hotel name
-                    String hotelName = hotelObject.get("name").getAsString();
-                    hotel.setHotelName(hotelName);
+                    if (hotelObject.has("name")) {
+                        String hotelName = hotelObject.get("name").getAsString();
+                        hotel.setHotelName(hotelName);
+                    }
 
                     // Extract and set hotel address (countryCode)
-                    String hotelAddress = hotelObject.getAsJsonObject("address").get("countryCode").getAsString();
-                    hotel.setHotelAddress(hotelAddress);
+                    if (hotelObject.has("address") && hotelObject.getAsJsonObject("address").has("countryCode")) {
+                        String hotelAddress = hotelObject.getAsJsonObject("address").get("countryCode").getAsString();
+                        hotel.setHotelAddress(hotelAddress);
+                    }
 
                     // Extract and set hotel distance
-                    double hotelDistance = hotelObject.getAsJsonObject("distance").get("value").getAsDouble();
-                    hotel.setHotelDistance(hotelDistance);
+                    if (hotelObject.has("distance") && hotelObject.getAsJsonObject("distance").has("value")) {
+                        double hotelDistance = hotelObject.getAsJsonObject("distance").get("value").getAsDouble();
+                        hotel.setHotelDistance(hotelDistance);
+                    }
+
                     hotelHandler.addHotel(hotel);
-                    count++;
                 }
             } else {
                 System.out.println("Hotel data is missing or incomplete.");
@@ -120,6 +125,8 @@ public class HotelAPI {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        hotelHandler.displayHotelList();
+
+        return hotelHandler.getHotels();
     }
+
 }

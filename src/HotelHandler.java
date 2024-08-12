@@ -19,4 +19,8 @@ public class HotelHandler {
             count++;
         }
     }
+
+    public void setHotels(ArrayList<Hotel> hotels) {
+        this.hotels = hotels;
+    }
 }
