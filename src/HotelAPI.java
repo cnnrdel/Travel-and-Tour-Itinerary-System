@@ -66,9 +66,9 @@ public class HotelAPI {
                 int expiresIn = jsonResponse.get("expires_in").getAsInt();
 
                 tokenExpiryTime = Instant.now().plusSeconds(expiresIn);
-
-                System.out.println("New Access Token: " + accessToken);
-                System.out.println("Token Expires At: " + tokenExpiryTime);
+//  debugging
+//                System.out.println("New Access Token: " + accessToken);
+//                System.out.println("Token Expires At: " + tokenExpiryTime);
             } else {
                 System.err.println("Failed to obtain access token: " + response.body());
             }

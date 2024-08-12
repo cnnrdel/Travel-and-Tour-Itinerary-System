@@ -1,15 +1,14 @@
 import java.net.URI;
+import java.net.URLEncoder;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.nio.charset.StandardCharsets;
 import java.time.Instant;
-import com.google.gson.Gson;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
+
+import com.google.gson.*;
 
 import client_keys.EncryptionUtil;
-
-import com.google.gson.JsonArray;
 
 public class FlightAPI {
     private static final String TOKEN_URL = "https://test.api.amadeus.com/v1/security/oauth2/token";
@@ -105,8 +104,8 @@ public class FlightAPI {
                     trainStatus,
                     encodedStationDetail,
                     encodedType,
-                    APP_KEY,
-                    APP_ID
+                    CLIENT_ID,
+                    CLIENT_SECRET
             );
 
             URI uri = new URI(url);

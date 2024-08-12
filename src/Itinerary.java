@@ -3,7 +3,7 @@ import java.util.*;
 
 public class Itinerary {
 	private String tripName;
-	private static PlaceHandler placesList;
+	private static PlaceHandler placesList = new PlaceHandler();
 	private static int counter = 0;
 	private int uniqueCounter = 0;
 	private String notes;
