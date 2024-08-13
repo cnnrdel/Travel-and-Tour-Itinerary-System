@@ -1,15 +1,3 @@
-// import javax.swing.JFrame;
-
-// public class MainGUI extends JFrame {
-// 	public MainGUI() {
-// 	}
-	
-		
-// }
-
-// package test;
-
-// package src;
 import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -46,22 +34,9 @@ public class MainGUI {
     /**
      * Launch the application.
      */
-
     public JFrame getFrame(){
         return frame;
     }
-    // public static void main(String[] args) {
-    //     EventQueue.invokeLater(new Runnable() {
-    //         public void run() {
-    //             try {
-    //                 MainGUI window = new MainGUI();
-    //                 window.frame.setVisible(true);
-    //             } catch (Exception e) {
-    //                 e.printStackTrace();
-    //             }
-    //         }
-    //     });
-    // }
 
     /**
      * Create the application.
@@ -101,7 +76,6 @@ public class MainGUI {
         // Create the panel that will hold the buttons
         buttonPanel = new JPanel();
         gbl_buttonPanel = new GridBagLayout();
-//        GridBagLayout.
         buttonPanel.setLayout(gbl_buttonPanel);
         
         // constraints for itineraries being at top of JScroll
@@ -114,9 +88,6 @@ public class MainGUI {
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         frame.getContentPane().add(scrollPane, BorderLayout.CENTER);
-//        frame.getContentPane().add(scrollPane, BorderLayout.NORTH);
-
-
         
         // Add the + button
         btnNewButton = new JButton("+");
@@ -141,7 +112,6 @@ public class MainGUI {
      */
     protected void addNewButton() {
         JButton newButton = new JButton("Itinerary #" + (++buttonCount));
-        // ItineraryHandler ih = new ItineraryHandler;
         Itinerary newItinerary = new Itinerary();
         
         // Get screen width
@@ -163,7 +133,6 @@ public class MainGUI {
         /*
          *  Itinerary Code
          */
-        // buttonItineraryMap.put(newButton, newItinerary);
         newButton.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		System.out.println("Clicked: " + newButton.getLabel() + "!");
@@ -182,12 +151,12 @@ public class MainGUI {
         buttonPanel.revalidate();
         buttonPanel.repaint();
     }
+
     private void handleButtonClick(Itinerary i) {
         System.out.println("Creating ItineraryGUI");
     	ItineraryGUI itineraryGUI = new ItineraryGUI(i, this);
         itineraryGUI.setVisible(true);
     }
-
 
     //Remove the Deleted Itineraries
     protected void removeItineraryButton(Itinerary itinerary) {
