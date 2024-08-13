@@ -20,7 +20,7 @@ public class MainGUI {
     private GridBagLayout gbl_buttonPanel;
     private JLabel titleLbl;
     private GridBagConstraints gbc;
-    private JButton btnNewButton;
+    private JButton addItineraryClick;
     private JFrame frame;
     private JPanel buttonPanel;
     private JScrollPane scrollPane;
@@ -54,7 +54,9 @@ public class MainGUI {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.getContentPane().setLayout(new BorderLayout(0, 0));
 
-        // Create the main panel
+        /*****************************
+         *          DECORATE
+         ***************************/
         mainPanel = new JPanel();
         frame.getContentPane().add(mainPanel, BorderLayout.NORTH);
         gbl_mainPanel = new GridBagLayout();
@@ -89,17 +91,19 @@ public class MainGUI {
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         frame.getContentPane().add(scrollPane, BorderLayout.CENTER);
         
-        // Add the + button
-        btnNewButton = new JButton("+");
+        /*
+         * ADD ITINERRAY BUTTON
+         */
+        addItineraryClick = new JButton("+");
         gbc_btnPlus = new GridBagConstraints();
         gbc_btnPlus.insets = new Insets(10, 10, 10, 10);  // Add space around the + button
         gbc_btnPlus.gridx = 0;
         gbc_btnPlus.gridy = 1;
         gbc_btnPlus.anchor = GridBagConstraints.WEST;  // Align to the left
-        mainPanel.add(btnNewButton, gbc_btnPlus);
+        mainPanel.add(addItineraryClick, gbc_btnPlus);
 
-        // Add action listener to the + button
-        btnNewButton.addActionListener(new ActionListener() {
+        // Add action listener to the add itinerary button
+        addItineraryClick.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 addNewButton();
                 System.out.println("Adding Button for Itinerary #" + buttonCount);
@@ -108,7 +112,7 @@ public class MainGUI {
     }
 
     /**
-     * Adds a new button to the buttonPanel.
+     * ADD NEW ITINERARY TO MAIN GUI
      */
     protected void addNewButton() {
         JButton newButton = new JButton("Itinerary #" + (++buttonCount));
@@ -131,34 +135,34 @@ public class MainGUI {
         gbc_newButton.weightx = 1.0; // Allow it to grow horizontally if needed
         
         /*
-         *  Itinerary Code
+         *  OPEN ITINERARY
          */
         newButton.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		System.out.println("Clicked: " + newButton.getLabel() + "!");
-       		    handleButtonClick(newItinerary);
+       		    openItineraryClick(newItinerary);
         	}
         });
         
-
         buttonPanel.add(newButton, gbc_newButton);
-
         itineraryButtonMap.put(newItinerary, newButton);
-
-        // Resize the buttonPanel based on the new button
-        buttonPanel.setPreferredSize(new Dimension(scrollPane.getViewport().getWidth(), buttonPanel.getPreferredSize().height + 40));
-        
+        buttonPanel.setPreferredSize(new Dimension(scrollPane.getViewport().getWidth(), buttonPanel.getPreferredSize().height + 40));        
         buttonPanel.revalidate();
         buttonPanel.repaint();
     }
 
-    private void handleButtonClick(Itinerary i) {
+    /*
+     * CONSTRUCT ITINERARY GUI
+     */
+    private void openItineraryClick(Itinerary i) {
         System.out.println("Creating ItineraryGUI");
     	ItineraryGUI itineraryGUI = new ItineraryGUI(i, this);
         itineraryGUI.setVisible(true);
     }
 
-    //Remove the Deleted Itineraries
+    /*
+     * DELETE ITINERARY
+     */
     protected void removeItineraryButton(Itinerary itinerary) {
         JButton buttonToRemove = itineraryButtonMap.get(itinerary);
         if (buttonToRemove != null) {
@@ -171,7 +175,9 @@ public class MainGUI {
     }
 
 
-    //Update the Label for Itineraries
+    /*
+     * UPDATE ITINERARY
+     */
     public void updateItineraryButtonLabel(Itinerary itinerary, String newLabel) {
         JButton buttonToUpdate = itineraryButtonMap.get(itinerary);
         if (buttonToUpdate != null) {

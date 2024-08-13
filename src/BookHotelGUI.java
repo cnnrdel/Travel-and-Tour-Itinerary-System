@@ -1,13 +1,12 @@
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import javax.swing.*;
 
 public class BookHotelGUI extends JFrame {
-
     private Itinerary itinerary;
     private HotelAPI hotelAPI;
-    private DefaultListModel<String> listModel;
+    private DefaultListModel<String> hotelDisplay;
     private HotelHandler hotelHandler = new HotelHandler();
     private JList<String> hotelList;
 
@@ -36,15 +35,18 @@ public class BookHotelGUI extends JFrame {
         setBounds(100, 100, 450, 300);
         getContentPane().setLayout(new BorderLayout());
 
-        listModel = new DefaultListModel<>();
+        hotelDisplay = new DefaultListModel<>();
         for (Hotel hotel : hotelHandler.getHotels()) {
-            listModel.addElement(hotel.getHotelName() + " - " + hotel.getHotelAddress());
+            hotelDisplay.addElement(hotel.getHotelName() + " - " + hotel.getHotelAddress());
         }
 
-        hotelList = new JList<>(listModel);
+        hotelList = new JList<>(hotelDisplay);
         JScrollPane scrollPane = new JScrollPane(hotelList);
         getContentPane().add(scrollPane, BorderLayout.CENTER);
 
+        /*************************
+         *      BOOK BUTTON
+         *************************/
         JButton btnBook = new JButton("Book");
         btnBook.addActionListener(new ActionListener() {
             @Override
