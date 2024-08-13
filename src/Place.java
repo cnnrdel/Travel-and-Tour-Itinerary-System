@@ -1,4 +1,7 @@
-public class Place {
+import java.io.Serializable;
+
+public class Place implements Serializable{
+	private static final long serialVersionUID = 1L;
 	private String placeName;
 	private String placeNotes;
 	

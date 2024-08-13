@@ -3,6 +3,8 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
+import client_keys.EncryptionUtil;
+
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -11,9 +13,18 @@ import java.util.ArrayList;
 
 public class BusAPI {
     private BusHandler busHandler = new BusHandler();
-    private static final String APP_ID = "3510aec5";
-    private static final String APP_KEY = "1e7f9a64a44f11db885af0c42dedc968";
+    private static String APP_ID;
+    private static String APP_KEY;
     private static final Gson gson = new Gson();
+
+    public BusAPI() {
+        try {
+            APP_ID = EncryptionUtil.readEncryptedDataFromFile("src/app_id.txt");
+            APP_KEY = EncryptionUtil.readEncryptedDataFromFile("src/app_secret.txt");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     public ArrayList<Bus> runBusAPI(String date) {
         try {

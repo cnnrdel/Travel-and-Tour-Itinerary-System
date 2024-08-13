@@ -41,18 +41,26 @@ public class MainGUI {
     /**
      * Create the application.
      */
-    public MainGUI() {
-        initialize();
+    public MainGUI(ItineraryHandler handler) {
+        initialize(handler);
     }
 
     /**
      * Initialize the contents of the frame.
      */
-    private void initialize() {
+    private void initialize(ItineraryHandler handler) {
+        handler.loadItinerariesFromFile();
         frame = new JFrame();
         frame.setBounds(100, 100, 450, 300);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.getContentPane().setLayout(new BorderLayout(0, 0));
+        frame.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+                handler.saveItinerariesToFile();
+                System.exit(0);
+            }
+        });
 
         /*****************************
          *          DECORATE
@@ -79,7 +87,7 @@ public class MainGUI {
         buttonPanel = new JPanel();
         gbl_buttonPanel = new GridBagLayout();
         buttonPanel.setLayout(gbl_buttonPanel);
-        
+
         // constraints for itineraries being at top of JScroll
         gbc = new GridBagConstraints();
         gbc.insets = new Insets(0,0,0,0);
@@ -91,6 +99,14 @@ public class MainGUI {
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         frame.getContentPane().add(scrollPane, BorderLayout.CENTER);
         
+        // Load existing itineraries and create buttons for them
+        int i = 0;
+        for (Itinerary itinerary : handler.getItineraryList()) {
+            //addNewButton1(itinerary);
+            i++;
+            System.out.println(i);
+        }
+
         /*
          * ADD ITINERRAY BUTTON
          */
@@ -105,7 +121,7 @@ public class MainGUI {
         // Add action listener to the add itinerary button
         addItineraryClick.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                addNewButton();
+                addItinerary();
                 System.out.println("Adding Button for Itinerary #" + buttonCount);
             }
         });
@@ -114,7 +130,7 @@ public class MainGUI {
     /**
      * ADD NEW ITINERARY TO MAIN GUI
      */
-    protected void addNewButton() {
+    protected void addItinerary() {
         JButton newButton = new JButton("Itinerary #" + (++buttonCount));
         Itinerary newItinerary = new Itinerary();
         
@@ -143,7 +159,40 @@ public class MainGUI {
        		    openItineraryClick(newItinerary);
         	}
         });
-        
+    
+    /* 
+        protected void addNewButton1(Itinerary newItinerary) {
+            JButton newButton = new JButton(newItinerary.getName());
+            
+            
+            // Get screen width
+            Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+            int screenWidth = (int) screenSize.getWidth();
+            
+            // Set the preferred size of the button based on the screen width
+            int buttonWidth = screenWidth - 100; // Subtract some pixels to fit within screen
+            newButton.setPreferredSize(new Dimension(buttonWidth, 30)); // Width: calculated width, Height: 30px
+            
+            GridBagConstraints gbc_newButton = new GridBagConstraints();
+            gbc_newButton.insets = new Insets(10, 10, 10, 10);  // Add space around the buttons
+            gbc_newButton.gridx = 0;
+            gbc_newButton.gridy = buttonCount;
+            gbc_newButton.anchor = GridBagConstraints.WEST;  // Align to the left
+            gbc_newButton.fill = GridBagConstraints.HORIZONTAL; // Make it fill the horizontal space
+            gbc_newButton.weightx = 1.0; // Allow it to grow horizontally if needed
+            
+            
+             //  Itinerary Code
+             
+            newButton.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    System.out.println("Clicked: " + newButton.getLabel() + "!");
+                       handleButtonClick(newItinerary);
+                }
+            });
+        }
+        */ 
+
         buttonPanel.add(newButton, gbc_newButton);
         itineraryButtonMap.put(newItinerary, newButton);
         buttonPanel.setPreferredSize(new Dimension(scrollPane.getViewport().getWidth(), buttonPanel.getPreferredSize().height + 40));        

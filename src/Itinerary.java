@@ -1,7 +1,9 @@
 import java.util.ArrayList;
+import java.io.Serializable;
 import java.util.*;
 
-public class Itinerary {
+public class Itinerary implements Serializable{
+	private static final long serialVersionUID = 1L;
 	private String tripName;
 	private static PlaceHandler placesList = new PlaceHandler();
 	private static int counter = 0;

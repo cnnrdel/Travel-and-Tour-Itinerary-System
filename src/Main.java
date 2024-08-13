@@ -2,7 +2,9 @@ import javax.swing.JFrame;
 
 public class Main {
 	public static void main(String[] args) {
-		MainGUI mainGUI = new MainGUI();
+		ItineraryHandler handler = new ItineraryHandler();
+		MainGUI mainGUI = new MainGUI(handler);
+		
 		JFrame frame = mainGUI.getFrame();
 		frame.setVisible(true);
 
@@ -12,7 +14,7 @@ public class Main {
 		HotelAPI hotelAPI = new HotelAPI();
 		hotelAPI.runHotelAPI(4, "NYC");
 
-
+		handler.saveItinerariesToFile();
     }
 }
 
