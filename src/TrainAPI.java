@@ -3,6 +3,8 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+import client_keys.EncryptionUtil;
+
 import java.net.URI;
 import java.net.URLEncoder;
 import java.net.http.HttpClient;
@@ -15,8 +17,18 @@ import java.util.List;
 public class TrainAPI {
     private TrainHandler trainHandler = new TrainHandler();
     private static final Gson gson = new Gson();
-    private static final String APP_ID = "3510aec5";
-    private static final String APP_KEY = "1e7f9a64a44f11db885af0c42dedc968";
+    private static String APP_ID;
+    private static String APP_KEY;
+
+    public TrainAPI() {
+        try {
+            APP_ID = EncryptionUtil.readEncryptedDataFromFile("src/app_id.txt");
+            APP_KEY = EncryptionUtil.readEncryptedDataFromFile("src/app_secret.txt");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public ArrayList<Train> runTrainsAPI(String dateTime, String stationCode) {
         ArrayList<Train> trainList = new ArrayList<>();
 
