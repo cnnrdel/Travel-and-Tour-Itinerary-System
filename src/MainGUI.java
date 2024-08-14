@@ -124,9 +124,9 @@ public class MainGUI {
         // Load existing itineraries and create buttons for them
         int i = 0;
         for (Itinerary itinerary : handler.getItineraryList()) {
-            //addNewButton1(itinerary);
+            addNewButton(itinerary,handler);
             i++;
-            System.out.println(i);
+            //System.out.println(i);
         }
     }
 
@@ -160,7 +160,7 @@ public class MainGUI {
         newButton.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		System.out.println("Clicked: " + newButton.getLabel() + "!");
-       		    openItineraryClick(newItinerary);
+       		    openItineraryClick(newItinerary,handler);
         	}
         });
     
@@ -206,16 +206,16 @@ public class MainGUI {
     /*
      * CONSTRUCT ITINERARY GUI
      */
-    private void openItineraryClick(Itinerary i) {
+    private void openItineraryClick(Itinerary i,ItineraryHandler handler) {
         System.out.println("Creating ItineraryGUI");
-    	ItineraryGUI itineraryGUI = new ItineraryGUI(i, this);
+    	ItineraryGUI itineraryGUI = new ItineraryGUI(i, this,handler);
         itineraryGUI.setVisible(true);
     }
 
     /*
      * DELETE ITINERARY
      */
-    protected void removeItineraryButton(Itinerary itinerary) {
+    protected void removeItineraryButton(Itinerary itinerary, ItineraryHandler handler) {
         JButton buttonToRemove = itineraryButtonMap.get(itinerary);
         if (buttonToRemove != null) {
             buttonPanel.remove(buttonToRemove);
@@ -223,6 +223,7 @@ public class MainGUI {
             buttonPanel.repaint();
             itineraryButtonMap.remove(itinerary);
             buttonCount--;
+            handler.deleteItinerary(itinerary.getName());
         }
     }
 
@@ -235,6 +236,40 @@ public class MainGUI {
         if (buttonToUpdate != null) {
             buttonToUpdate.setText(newLabel);
         }
+    }
+
+
+    protected void addNewButton(Itinerary newItinerary,ItineraryHandler handler) {
+        JButton newButton = new JButton(newItinerary.getName());
+    
+        // 
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        int screenWidth = (int) screenSize.getWidth();
+    
+        
+        int buttonWidth = screenWidth - 100; 
+        newButton.setPreferredSize(new Dimension(buttonWidth, 30)); // 
+    
+        GridBagConstraints gbc_newButton = new GridBagConstraints();
+        gbc_newButton.insets = new Insets(10, 10, 10, 10);  // 
+        gbc_newButton.gridx = 0;
+        gbc_newButton.gridy = ++buttonCount;  // 
+        gbc_newButton.anchor = GridBagConstraints.WEST;  // 
+        gbc_newButton.fill = GridBagConstraints.HORIZONTAL; // 
+        gbc_newButton.weightx = 1.0; // 
+    
+        newButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("Clicked: " + newButton.getText() + "!");
+                openItineraryClick(newItinerary,handler);
+            }
+        });
+    
+        buttonPanel.add(newButton, gbc_newButton);
+        itineraryButtonMap.put(newItinerary, newButton);
+        buttonPanel.setPreferredSize(new Dimension(scrollPane.getViewport().getWidth(), buttonPanel.getPreferredSize().height + 40));        
+        buttonPanel.revalidate();
+        buttonPanel.repaint();
     }
 }
 

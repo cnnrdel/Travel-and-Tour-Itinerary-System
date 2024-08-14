@@ -16,6 +16,7 @@ public class ItineraryGUI extends JFrame {
     private Itinerary itinerary;
     private JTextField textField;
     private JTextField txtItinerary;
+    private ItineraryHandler handler;
 
     /***********************
      *      CONSTRUCTORS
@@ -30,9 +31,10 @@ public class ItineraryGUI extends JFrame {
     /*
      * PROPER
      */
-    public ItineraryGUI(Itinerary itinerary, MainGUI mainGUI) {
+    public ItineraryGUI(Itinerary itinerary, MainGUI mainGUI, ItineraryHandler handler) {
         this.itinerary = itinerary;
         this.mainGUI = mainGUI;
+        this.handler = handler;
         initialize(itinerary);
     }
 
@@ -95,7 +97,7 @@ public class ItineraryGUI extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 txtItinerary.setText(""); 
                 textField.setText(""); 
-                mainGUI.removeItineraryButton(itinerary);
+                mainGUI.removeItineraryButton(itinerary,handler);
                 dispose();  
             }
         });
