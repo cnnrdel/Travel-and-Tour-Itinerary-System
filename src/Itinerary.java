@@ -5,7 +5,6 @@ import java.util.*;
 public class Itinerary implements Serializable{
 	private static final long serialVersionUID = 1L;
 	private String tripName;
-	private static PlaceHandler placesList = new PlaceHandler();
 	private static int counter = 0;
 	private int uniqueCounter = 0;
 	private String notes;
@@ -33,10 +32,6 @@ public class Itinerary implements Serializable{
 	
 	public void setTripName(String name) {
 		tripName = name;
-	}
-	
-	public PlaceHandler getPlacesList(){
-		return placesList;
 	}
 	
 	public String getNotes() {

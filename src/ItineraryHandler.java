@@ -11,7 +11,6 @@ public class ItineraryHandler implements Serializable{
 	private static final long serialVersionUID = 1L;
 	private static final String FILE_PATH = "itineraries.ser";
 	private static ArrayList<Itinerary> itineraryList = new ArrayList<Itinerary>();
-	private static PlaceHandler placesList = new PlaceHandler();
 	
 	public void addItinerary(Itinerary itinerary) {
 		itineraryList.add(itinerary);
@@ -33,12 +32,12 @@ public class ItineraryHandler implements Serializable{
         }
 	}
 	
-	public void displayItineraryList() {
-		for (Itinerary itinerary: itineraryList) {
-			System.out.println(itinerary.getTripName());
-			itinerary.getPlacesList().displayAllPlaces();
-		}
-	}
+//	public void displayItineraryList() {
+//		for (Itinerary itinerary: itineraryList) {
+//			System.out.println(itinerary.getTripName());
+//
+//		}
+//	}
 
 	public void saveItinerariesToFile() {
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(FILE_PATH))) {

@@ -1,20 +1,12 @@
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
+import javax.swing.*;
 
 public class ItineraryGUI extends JFrame {
     private MainGUI mainGUI;
     private Itinerary itinerary;
-    private JTextField textField;
+    private JTextArea textField;
     private JTextField txtItinerary;
     private ItineraryHandler handler;
 
@@ -109,16 +101,29 @@ public class ItineraryGUI extends JFrame {
          * NOTES
          */
         JLabel lblNotes = new JLabel("Notes:");
-        gbc.gridx = 0;
-        gbc.gridy = 1;
-        getContentPane().add(lblNotes, gbc);
+//        gbc.gridx = 0;
+//        gbc.gridy = 1;
+//        getContentPane().add(lblNotes, gbc);
+//
+//        textField = new JTextField( 20);
+//        textField.setText(i.getNotes());
+//        gbc.gridx = 0;
+//        gbc.gridy = 2;
+//        gbc.gridwidth = 3;
+//        gbc.gridheight = 3;
+//        getContentPane().add(textField, gbc);
 
-        textField = new JTextField();
+        textField = new JTextArea(5, 20); // Create a JTextArea with 5 rows and 20 columns
         textField.setText(i.getNotes());
+        textField.setLineWrap(true); // Enable line wrapping
+        textField.setWrapStyleWord(true); // Wrap at word boundaries
+        textField.setPreferredSize(new Dimension(200, 100)); // Set the preferred size
+
         gbc.gridx = 0;
         gbc.gridy = 2;
         gbc.gridwidth = 3;
-        getContentPane().add(textField, gbc);
+        gbc.gridheight = 3;
+        getContentPane().add(new JScrollPane(textField), gbc); // Add the text area inside a scroll pane
 
         /*
          * TITLE
@@ -142,20 +147,20 @@ public class ItineraryGUI extends JFrame {
         gbc.gridwidth = 3;
         getContentPane().add(panel, gbc);
 
-        JButton btnPlace1 = new JButton("P1");
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        panel.add(btnPlace1, gbc);
+//        JButton btnPlace1 = new JButton("P1");
+//        gbc.gridx = 0;
+//        gbc.gridy = 0;
+//        panel.add(btnPlace1, gbc);
 
         JLabel lblArrow = new JLabel("→");
         gbc.gridx = 1;
         gbc.gridy = 0;
         panel.add(lblArrow, gbc);
 
-        JButton btnAddPlace = new JButton("+");
-        gbc.gridx = 2;
-        gbc.gridy = 0;
-        panel.add(btnAddPlace, gbc);
+//        JButton btnAddPlace = new JButton("+");
+//        gbc.gridx = 2;
+//        gbc.gridy = 0;
+//        panel.add(btnAddPlace, gbc);
 
         JPanel bottomPanel = new JPanel();
         gbc.gridx = 0;
@@ -197,7 +202,16 @@ public class ItineraryGUI extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 new BookTrainGUI(itinerary).setVisible(true);
+
+                // Ensure the text field is updated with the latest notes
+//                textField.setText(itinerary.getNotes());
+                System.out.println("ITINERARY: " + itinerary.getNotes());
+
+//                txtItinerary.setText(itinerary.getNotes()); // Set text based on Itinerary objec
+//                getContentPane().add(txtItinerary, gbc);
             }
+
+
         });
 
         /*
@@ -227,5 +241,7 @@ public class ItineraryGUI extends JFrame {
                 new BookFlightGUI(itinerary).setVisible(true);
             }
         });
+
+
     }
 }
