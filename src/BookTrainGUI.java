@@ -12,10 +12,13 @@ public class BookTrainGUI extends JFrame {
     private DefaultListModel<String> trainListModel;
     private TrainAPI trainAPI = new TrainAPI();
     private TrainHandler trainHandler = new TrainHandler();
+//    private Itinerary itinerary = new Itinerary();
     private Itinerary itinerary;
 
+
     public BookTrainGUI(Itinerary itinerary) {
-        this.itinerary = new Itinerary();
+//        this.itinerary = new Itinerary();
+        this.itinerary = itinerary;
         this.trainAPI = new TrainAPI();
         this.trainHandler = new TrainHandler();
         initialize();
@@ -132,6 +135,7 @@ public class BookTrainGUI extends JFrame {
 
     private void bookTrain() {
         String selectedTrain = trainList.getSelectedValue();
+        System.out.println(selectedTrain);
 
         if (selectedTrain == null) {
             JOptionPane.showMessageDialog(this, "Please select a train to book.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -139,5 +143,19 @@ public class BookTrainGUI extends JFrame {
         }
 
         JOptionPane.showMessageDialog(this, "Booked train: " + selectedTrain, "Booking Confirmation", JOptionPane.INFORMATION_MESSAGE);
+        String currentNotes = itinerary.getNotes();
+        System.out.println("notes:" + currentNotes);
+        String updatedNotes = currentNotes + '\n' + selectedTrain;
+        System.out.println("UPDated Notes:" + updatedNotes);
+        itinerary.setNotes(updatedNotes);
+        ItineraryGUI i = new ItineraryGUI();
+        i.setVisible(true);
+        System.out.println("notes:" + itinerary.getNotes());
+//        ItineraryGUI.txtItinerary
+//        this.test = itinerary.getNotes();
+//        return itinerary.getNotes();
+
+
     }
+
 }
