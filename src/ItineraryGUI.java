@@ -187,11 +187,11 @@ public class ItineraryGUI extends JFrame {
         /*
          * TRAIN
          */
-        JButton btnTrain = new JButton("Train");
+        JButton btnBookTrain = new JButton("Train");
         gbcBottom.gridx = 1;
         gbcBottom.gridy = 0;
-        bottomPanel.add(btnTrain, gbcBottom);
-        btnTrain.addActionListener(new ActionListener() {
+        bottomPanel.add(btnBookTrain, gbcBottom);
+        btnBookTrain.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 new BookTrainGUI(itinerary).setVisible(true);
