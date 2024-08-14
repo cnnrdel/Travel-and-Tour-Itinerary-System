@@ -18,7 +18,7 @@ import java.awt.BorderLayout;
 
 public class MainGUI {
     private GridBagLayout gbl_buttonPanel;
-    private JLabel titleLbl;
+    private JLabel lblTitle;
     private GridBagConstraints gbc;
     private JButton addItineraryClick;
     private JFrame frame;
@@ -75,13 +75,13 @@ public class MainGUI {
         mainPanel.setLayout(gbl_mainPanel);
 
         // Add JLabel
-        titleLbl = new JLabel("Global Getaways");
-        titleLbl.setFont(new Font("Segoe UI Semibold", Font.PLAIN, 32));
+        lblTitle = new JLabel("Global Getaways");
+        lblTitle.setFont(new Font("Segoe UI Semibold", Font.PLAIN, 32));
         gbc_lblNewLabel = new GridBagConstraints();
         gbc_lblNewLabel.insets = new Insets(0, 0, 5, 0);
         gbc_lblNewLabel.gridx = 0;
         gbc_lblNewLabel.gridy = 0;
-        mainPanel.add(titleLbl, gbc_lblNewLabel);
+        mainPanel.add(lblTitle, gbc_lblNewLabel);
 
         // Create the panel that will hold the buttons
         buttonPanel = new JPanel();

@@ -174,12 +174,12 @@ public class ItineraryGUI extends JFrame {
         /*
          * HOTEL
          */
-        JButton btnHotel = new JButton("Hotel");
+        JButton bookHotel = new JButton("Hotel");
         gbcBottom.gridx = 0;
         gbcBottom.gridy = 0;
-        bottomPanel.add(btnHotel, gbcBottom);
+        bottomPanel.add(bookHotel, gbcBottom);
 
-        btnHotel.addActionListener(new ActionListener() {
+        bookHotel.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 new BookHotelGUI(itinerary).setVisible(true);
