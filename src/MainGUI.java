@@ -124,7 +124,7 @@ public class MainGUI {
         // Load existing itineraries and create buttons for them
         int i = 0;
         for (Itinerary itinerary : handler.getItineraryList()) {
-            addNewButton1(itinerary);
+            //addNewButton1(itinerary);
             i++;
             System.out.println(i);
         }
@@ -163,8 +163,8 @@ public class MainGUI {
        		    openItineraryClick(newItinerary);
         	}
         });
-    }
-     /* */
+    
+     /* 
         protected void addNewButton1(Itinerary newItinerary) {
             JButton newButton = new JButton(newItinerary.getName());
             
@@ -194,7 +194,7 @@ public class MainGUI {
                        openItineraryClick(newItinerary);
                 }
             });
-        
+        */
 
         buttonPanel.add(newButton, gbc_newButton);
         itineraryButtonMap.put(newItinerary, newButton);
