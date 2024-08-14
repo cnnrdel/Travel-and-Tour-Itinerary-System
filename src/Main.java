@@ -8,11 +8,13 @@ public class Main {
 		JFrame frame = mainGUI.getFrame();
 		frame.setVisible(true);
 
+		// debugging
 //		FlightAPI flightAPI = new FlightAPI();
 //		flightAPI.runFlightAPI("NYC", "SYD", "2024-08-11", 4);
 
-		HotelAPI hotelAPI = new HotelAPI();
-		hotelAPI.runHotelAPI(4, "NYC");
+		// debugging
+//		HotelAPI hotelAPI = new HotelAPI();
+//		hotelAPI.runHotelAPI(4, "NYC");
 
 		handler.saveItinerariesToFile();
     }
