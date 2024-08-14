@@ -32,7 +32,7 @@ public class BookFlightGUI extends JFrame {
         gbc.insets = new Insets(5, 5, 5, 5);
 
         // Origin label and text field
-        JLabel lblOrigin = new JLabel("Origin (NYC):");
+        JLabel lblOrigin = new JLabel("Please enter the origin city or airport code (e.g., NYC):");
         gbc.gridx = 0;
         gbc.gridy = 0;
         add(lblOrigin, gbc);
@@ -52,7 +52,7 @@ public class BookFlightGUI extends JFrame {
         add(tfDestination, gbc);
 
         // Departure Date label and text field
-        JLabel lblDepartureDate = new JLabel("Departure Date (YYYY-MM-DD):");
+        JLabel lblDepartureDate = new JLabel("Please enter the destination city or airport code (e.g., SYD):");
         gbc.gridx = 0;
         gbc.gridy = 2;
         add(lblDepartureDate, gbc);

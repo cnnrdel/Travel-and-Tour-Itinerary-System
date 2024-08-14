@@ -33,7 +33,7 @@ public class BookTrainGUI extends JFrame {
         gbc.insets = new Insets(5, 5, 5, 5);
 
         // DateTime label and text field
-        JLabel lblDateTime = new JLabel("Date and Time (2024-08-12T20:30:00+01:00):");
+        JLabel lblDateTime = new JLabel("Please enter the station code (e.g., RMD for Richmond or another UK station code): ");
         gbc.gridx = 0;
         gbc.gridy = 0;
         add(lblDateTime, gbc);
@@ -43,7 +43,7 @@ public class BookTrainGUI extends JFrame {
         add(tfDateTime, gbc);
 
         // Station Code label and text field
-        JLabel lblStationCode = new JLabel("Station Code (Input RMD or another UK Station Code):");
+        JLabel lblStationCode = new JLabel("Please enter the date and time in the following format: YYYY-MM-DDTHH:MM:SS±HH:MM (e.g., 2024-08-12T20:30:00+01:00): ");
         gbc.gridx = 0;
         gbc.gridy = 1;
         add(lblStationCode, gbc);

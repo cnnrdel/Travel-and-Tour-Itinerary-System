@@ -26,7 +26,7 @@ public class BookHotelGUI extends JFrame {
     }
 
     private String askForCityName() {
-        return JOptionPane.showInputDialog(this, "Enter the city name (NYC):", "City Name", JOptionPane.QUESTION_MESSAGE);
+        return JOptionPane.showInputDialog(this, "Please enter the city name (e.g., NYC):", "City Name", JOptionPane.QUESTION_MESSAGE);
     }
 
     private void initialize() {
