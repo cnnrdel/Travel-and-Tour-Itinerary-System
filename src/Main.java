@@ -16,7 +16,7 @@ public class Main {
 //		HotelAPI hotelAPI = new HotelAPI();
 //		hotelAPI.runHotelAPI(4, "NYC");
 
-		handler.saveItinerariesToFile();
+		//handler.saveItinerariesToFile();
     }
 }
 
