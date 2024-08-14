@@ -43,7 +43,7 @@ public class BookTrainGUI extends JFrame {
         add(tfDateTime, gbc);
 
         // Station Code label and text field
-        JLabel lblStationCode = new JLabel("Station Code (RMD):");
+        JLabel lblStationCode = new JLabel("Station Code (Input RMD or another UK Station Code):");
         gbc.gridx = 0;
         gbc.gridy = 1;
         add(lblStationCode, gbc);
