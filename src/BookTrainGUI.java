@@ -151,9 +151,7 @@ public class BookTrainGUI extends JFrame {
         ItineraryGUI i = new ItineraryGUI();
         i.setVisible(true);
         System.out.println("notes:" + itinerary.getNotes());
-//        ItineraryGUI.txtItinerary
-//        this.test = itinerary.getNotes();
-//        return itinerary.getNotes();
+        dispose();
 
 
     }
